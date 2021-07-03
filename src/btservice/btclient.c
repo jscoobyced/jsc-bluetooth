@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <glib.h>
 #include <gio/gio.h>
-#include "btconstant.h"
 #include "btclient.h"
 #include "logger.h"
 

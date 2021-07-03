@@ -1,6 +1,6 @@
 lib_LTLIBRARIES = libbtservice.la
 libbtservice_la_SOURCES = btserver.c btclient.c
-include_HEADERS = btconstant.h btserver.h btclient.h
+include_HEADERS = btcommon.h btserver.h btclient.h
 libbtservice_la_CPPFLAGS = -I$(top_srcdir)/utils
 libbtservice_la_CFLAGS = ${GLIB_CFLAGS}
 libbtservice_la_CFLAGS += ${DBUS_CFLAGS}

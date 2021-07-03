@@ -2,8 +2,8 @@
 #include <glib.h>
 #include <gio/gio.h>
 #include <gio/gunixfdlist.h>
-#include "btconstant.h"
 #include "btserver.h"
+#include "btcommon.h"
 #include "logger.h"
 
 static const gchar introspection_xml[] =
@@ -133,7 +133,7 @@ static void signal_device_changed(GDBusConnection *conn,
 				goto done;
 			}
 			g_log(JSCBT, G_LOG_LEVEL_INFO, "%s is %s.", key, g_variant_get_boolean(value) ? "TRUE" : "FALSE");
-			if (!g_variant_get_boolean(value))
+			if (!g_strcmp0(key, "Connected") && !g_variant_get_boolean(value))
 			{
 				g_main_loop_quit(((serverUserData *)userdata)->loop);
 			}
@@ -164,7 +164,7 @@ read_data(GIOChannel *channel, GIOCondition condition, gpointer data)
 	g_log(JSCBT, G_LOG_LEVEL_INFO, "Receiving a message");
 	if (g_io_channel_read_line(channel, &str_return, &length, &terminator_pos, &error) == G_IO_STATUS_ERROR)
 	{
-		g_warning("Something went wrong");
+		g_log(JSCBT, G_LOG_LEVEL_MESSAGE, "Something went wrong");
 	}
 
 	if (error != NULL)
@@ -176,13 +176,19 @@ read_data(GIOChannel *channel, GIOCondition condition, gpointer data)
 	GString *strline = g_string_new(str_return);
 	if (strline != NULL)
 	{
-		g_log(JSCBT, G_LOG_LEVEL_MESSAGE, "Received: %s", strline->str);
+		char *message = strline->str;
+		int length = strlen(message);
+		if (message[length - 1] == '\n')
+		{
+			message[length - 1] = '\0';
+		}
+		((serverConnectionData *)data)->messageCallback(message);
 		g_free(str_return);
 	}
 	return TRUE;
 }
 
-static void new_connection(GDBusMethodInvocation *invocation)
+static void new_connection(GDBusMethodInvocation *invocation, serverConnectionData *data)
 {
 	g_log(JSCBT, G_LOG_LEVEL_INFO, "New connection.");
 
@@ -201,7 +207,7 @@ static void new_connection(GDBusMethodInvocation *invocation)
 	int fd = g_unix_fd_list_get(fdList, handle, NULL);
 	g_log(JSCBT, G_LOG_LEVEL_INFO, "File descriptor %d", fd);
 	GIOChannel *channel = g_io_channel_unix_new(fd);
-	g_io_add_watch(channel, G_IO_IN, read_data, NULL);
+	g_io_add_watch(channel, G_IO_IN, read_data, data);
 }
 
 static void signal_method_call(GDBusConnection *conn, const char *sender,
@@ -212,7 +218,7 @@ static void signal_method_call(GDBusConnection *conn, const char *sender,
 	g_log(JSCBT, G_LOG_LEVEL_INFO, "Method invoked is [%s]\n\t on path [%s]\n\t with sender [%s]\n\t and interface [%s].", method, path, sender, interface);
 	if (!g_strcmp0(method, "NewConnection"))
 	{
-		new_connection(invocation);
+		new_connection(invocation, (serverConnectionData *)userdata);
 	}
 	else
 	{
@@ -220,10 +226,7 @@ static void signal_method_call(GDBusConnection *conn, const char *sender,
 	}
 }
 
-int register_service(char *service_path,
-										 char *service_name,
-										 int service_channel,
-										 char *service_uuid,
+int register_service(serverConnectionData *data,
 										 GLogLevelFlags flag)
 {
 	GDBusProxy *proxy;
@@ -246,7 +249,11 @@ int register_service(char *service_path,
 	g_assert_no_error(error);
 	error = NULL;
 
-	int result = register_profile(proxy, service_path, service_name, service_channel, service_uuid);
+	int result = register_profile(proxy,
+																data->service_path,
+																data->service_name,
+																data->service_channel,
+																data->service_uuid);
 	if (result != RESULT_OK)
 	{
 		return result;
@@ -294,8 +301,12 @@ int register_service(char *service_path,
 			}
 
 			g_dbus_connection_register_object(conn,
-																				service_path, interface,
-																				&vtable, NULL, NULL, &error);
+																				data->service_path,
+																				interface,
+																				&vtable,
+																				data,
+																				NULL,
+																				&error);
 
 			if (sub_id > 0)
 			{

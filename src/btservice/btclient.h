@@ -1,7 +1,6 @@
 #include <glib.h>
 #include <gio/gio.h>
-#include "btconstant.h"
-
+#include "btcommon.h"
 
 typedef struct BtDevice
 {

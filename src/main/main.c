@@ -20,6 +20,11 @@ void deviceCallback(btDevice *device)
   }
 }
 
+void messageCallback(char *message)
+{
+  g_log(JSCBT, G_LOG_LEVEL_MESSAGE, "%s", message);
+}
+
 void usage(char const *name)
 {
   printf("Usage: %s [register|discover]", name);
@@ -41,12 +46,14 @@ int main(int argc, char const *argv[])
     {
       g_log(JSCBT, G_LOG_LEVEL_MESSAGE, "Starting service \"%s\".", BLUETOOTH_SERVICE_NAME);
 
-      int result = register_service(
-          BLUETOOTH_SERVICE_PATH,
-          BLUETOOTH_SERVICE_NAME,
-          BLUETOOTH_SERVICE_CHANNEL,
-          BLUETOOTH_SERVICE_UUID,
-          flag);
+      serverConnectionData *data = malloc(sizeof(serverConnectionData));
+      data->service_channel = BLUETOOTH_SERVICE_CHANNEL;
+      data->service_name = BLUETOOTH_SERVICE_NAME;
+      data->service_path = BLUETOOTH_SERVICE_PATH;
+      data->service_uuid = BLUETOOTH_SERVICE_UUID;
+      data->messageCallback = messageCallback;
+
+      int result = register_service(data, flag);
       if (result != RESULT_OK)
       {
         g_log(JSCBT, G_LOG_LEVEL_ERROR, "Error %d occured while registering.", result);

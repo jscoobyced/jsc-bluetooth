@@ -36,6 +36,6 @@ while True:
     data = input()
     if not data:
         break
-    sock.send(data)
+    sock.send(data + "\n")
 
 sock.close()
