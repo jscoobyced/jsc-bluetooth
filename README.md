@@ -18,7 +18,7 @@ Currently, this has been tested only on Ubuntu 21.04, 64-bit and arm architectur
 You will need to install the following dependencies to build from sources:
 - build-essential
 - libtool
-- libbluetooth-dev
+- bluez
 - glib-2.0
 - libglib2.0-dev
 - libdbus-glib-1-dev
