@@ -13,19 +13,19 @@ void display_value(const gchar *key, GVariant *value)
   const gchar *signature = g_variant_get_type_string(value);
   if (g_variant_is_of_type(value, G_VARIANT_TYPE_BOOLEAN))
   {
-    g_log(JSCBT, G_LOG_LEVEL_INFO, "Key: [%s]\tValue: [%s]", signature, key, g_variant_get_boolean(value) ? "true" : "false");
+    g_log(JSCBT, G_LOG_LEVEL_INFO, "Key: [%s]\tValue: [%s]", key, g_variant_get_boolean(value) ? "true" : "false");
   }
   else if (g_variant_is_of_type(value, G_VARIANT_TYPE_STRING))
   {
-    g_log(JSCBT, G_LOG_LEVEL_INFO, "Key: [%s]\tValue: [%s]", signature, key, g_variant_get_string(value, NULL));
+    g_log(JSCBT, G_LOG_LEVEL_INFO, "Key: [%s]\tValue: [%s]", key, g_variant_get_string(value, NULL));
   }
   else if (g_variant_is_of_type(value, G_VARIANT_TYPE_INT16))
   {
-    g_log(JSCBT, G_LOG_LEVEL_INFO, "Key: [%s]\tValue: [%d]", signature, key, g_variant_get_int16(value));
+    g_log(JSCBT, G_LOG_LEVEL_INFO, "Key: [%s]\tValue: [%d]", key, g_variant_get_int16(value));
   }
   else if (g_variant_is_of_type(value, G_VARIANT_TYPE_INT32))
   {
-    g_log(JSCBT, G_LOG_LEVEL_INFO, "Key: [%s]\tValue: [%d]", signature, key, g_variant_get_int32(value));
+    g_log(JSCBT, G_LOG_LEVEL_INFO, "Key: [%s]\tValue: [%d]", key, g_variant_get_int32(value));
   }
   else if (g_strcmp0(signature, "as") == 0)
   {
@@ -34,7 +34,7 @@ void display_value(const gchar *key, GVariant *value)
     g_variant_get(value, "as", &iterator);
     while (g_variant_iter_loop(iterator, "s", &c))
     {
-      g_log(JSCBT, G_LOG_LEVEL_INFO, "Key: [%s]\tValue: [%s]", signature, key, c);
+      g_log(JSCBT, G_LOG_LEVEL_INFO, "Key: [%s]\tValue: [%s]", key, c);
     }
     g_variant_iter_free(iterator);
   }

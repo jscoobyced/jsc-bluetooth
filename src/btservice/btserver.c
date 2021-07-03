@@ -157,13 +157,6 @@ read_data(GIOChannel *channel, GIOCondition condition, gpointer data)
 	gsize terminator_pos;
 	GError *error = NULL;
 
-	/*
-	gchar buffer[100];
-	gsize bytes_read;
-
-	g_io_channel_read_chars(channel, buffer, sizeof(buffer), &bytes_read, &error);
-
-  */
 	if (condition != G_IO_IN)
 	{
 		return TRUE;
@@ -184,7 +177,7 @@ read_data(GIOChannel *channel, GIOCondition condition, gpointer data)
 	GString *strline = g_string_new(str_return);
 	if (strline != NULL)
 	{
-		g_log(JSCBT, G_LOG_LEVEL_MESSAGE, "Received: %s", strline->str, length, terminator_pos);
+		g_log(JSCBT, G_LOG_LEVEL_MESSAGE, "Received: %s", strline->str);
 		g_free(str_return);
 	}
 	return TRUE;
