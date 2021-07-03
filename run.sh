@@ -10,6 +10,6 @@ then
   JSC_CMD="./bin/client"
 fi
 
-pushd src/build/release > /dev/null
+pushd release > /dev/null
 LD_LIBRARY_PATH=./lib:$LD_LIBRARY_PATH ${JSC_CMD}
 popd > /dev/null

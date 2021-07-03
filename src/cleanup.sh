@@ -7,5 +7,6 @@ rm -Rf autom4te.cache m4 config aclocal.m4 compile config.* \
       btservice/Makefile.in btservice/Makefile btservice/.deps \
       btservice/.libs btservice/libbtservice_la* btservice/libbtservice.la \
       utils/Makefile.in utils/Makefile utils/.deps \
-      utils/.libs utils/libutils_la* utils/libutils.la
+      utils/.libs utils/libutils_la* utils/libutils.la \
+      ../release
       
