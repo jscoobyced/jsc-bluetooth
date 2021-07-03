@@ -1,9 +1,5 @@
 # JSC Bluetooth Library
 
-![jsc-bluetooth](https://github.com/jscoobyced/jsc-bluetooth/blob/main/bluetooth.png?raw=true)
-
-
-
 This bluetooth library contains a few C libraries to scan, register or communicate with bluetooth devices.
 
 Currently supported features:
