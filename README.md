@@ -7,7 +7,10 @@ Currently supported features:
 - Scan for bluetooth devices
 - Scan for bluetooth devices that have a particular service UUID
 - Pair/Unpair a device
-- Open a RFCOMM serial port communication with a device
+- Receive data over an RFCOMM serial port communication with a device
+
+Work in progress:
+- Send data over an RFCOMM serial port communication with a device
 
 ## Building
 
@@ -45,3 +48,24 @@ Internally it will call the `cleanup.sh` script.
 This will run the `configure` command, and if successful, run the `make` command.  
 If you run this script with the `install` argument it will also run `make install`.  
 By default the installation goes to `src/build/release/` folder.
+
+## Sample programs
+
+### Server
+
+You can start a server using the default service UUID (located in `src/main/main.h`) by launching from the root folder:
+```
+./run.sh server
+```
+Then you need a Bluetooth Serial communication client that can connect to it. There is a sample python client. You can run it (from a different machine):
+```
+python3 btclient.py
+```
+
+### Client
+
+You can start a scan of the default service UUID (located in `src/main/main.h`) by launching from the root folder:
+```
+./run.sh client
+```
+It doesn't do much, just scan and if it finds the device exposing the service UUID, it will print its name and MAC address.
