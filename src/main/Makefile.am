@@ -1,0 +1,12 @@
+bin_PROGRAMS = main
+main_SOURCES = main.c
+main_CPPFLAGS = -I$(top_srcdir)/btservice/
+main_CPPFLAGS += -I$(top_srcdir)/utils/
+main_CPPFLAGS += ${GLIB_CFLAGS}
+main_CPPFLAGS += ${GIOUNIX_CFLAGS}
+main_LDADD = ${GLIB_LIBS}
+main_LDADD += ${DBUSGLIB_LIBS}
+main_LDADD += ${DBUS_LIBS}
+main_LDADD += ${GIO_LIBS}
+main_LDADD += ../btservice/libbtservice.la
+main_LDADD += ../utils/libjscutils.la

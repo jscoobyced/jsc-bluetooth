@@ -19,6 +19,7 @@ You will need to install the following dependencies to build from sources:
 - build-essential
 - libtool
 - libbluetooth-dev
+- glib-2.0
 - libglib2.0-dev
 - libdbus-glib-1-dev
 - libdbus-1-dev

@@ -3,7 +3,7 @@
 #include <gio/gio.h>
 #include "btserver.h"
 #include "btclient.h"
-#include "jscturret.h"
+#include "main.h"
 #include "logger.h"
 
 void deviceCallback(btDevice *device)
