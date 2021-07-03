@@ -39,7 +39,7 @@ int main(int argc, char const *argv[])
   {
     if (strcmp("register", argv[1]) == 0)
     {
-      g_log(JSCBT, G_LOG_LEVEL_MESSAGE, "Starting registration of service \"%s\" of UUID [%s].", BLUETOOTH_SERVICE_NAME, BLUETOOTH_SERVICE_UUID);
+      g_log(JSCBT, G_LOG_LEVEL_MESSAGE, "Starting service \"%s\".", BLUETOOTH_SERVICE_NAME);
 
       int result = register_service(
           BLUETOOTH_SERVICE_PATH,

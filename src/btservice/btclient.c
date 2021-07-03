@@ -68,7 +68,6 @@ static void get_device_info(const gchar *key, GVariant *value, btDevice *device,
 		}
 		return;
 	}
-	display_value(key, value);
 }
 
 static void device_appeared(GDBusConnection *connection,

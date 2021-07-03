@@ -124,7 +124,6 @@ static void signal_device_changed(GDBusConnection *conn,
 	g_variant_get(params, "(&sa{sv}as)", &iface, &properties, &unknown);
 	while (g_variant_iter_next(properties, "{&sv}", &key, &value))
 	{
-		display_value(key, value);
 		if (!g_strcmp0(key, "Connected") || !g_strcmp0(key, "Paired"))
 		{
 			if (!g_variant_is_of_type(value, G_VARIANT_TYPE_BOOLEAN))
@@ -133,7 +132,7 @@ static void signal_device_changed(GDBusConnection *conn,
 							g_variant_get_type_string(value), "b");
 				goto done;
 			}
-			g_log(JSCBT, G_LOG_LEVEL_MESSAGE, "%s is %s.", key, g_variant_get_boolean(value) ? "TRUE" : "FALSE");
+			g_log(JSCBT, G_LOG_LEVEL_INFO, "%s is %s.", key, g_variant_get_boolean(value) ? "TRUE" : "FALSE");
 			if (!g_variant_get_boolean(value))
 			{
 				g_main_loop_quit(((serverUserData *)userdata)->loop);
@@ -162,7 +161,7 @@ read_data(GIOChannel *channel, GIOCondition condition, gpointer data)
 		return TRUE;
 	}
 
-	g_log(JSCBT, G_LOG_LEVEL_MESSAGE, "Receiving a message");
+	g_log(JSCBT, G_LOG_LEVEL_INFO, "Receiving a message");
 	if (g_io_channel_read_line(channel, &str_return, &length, &terminator_pos, &error) == G_IO_STATUS_ERROR)
 	{
 		g_warning("Something went wrong");
@@ -185,7 +184,7 @@ read_data(GIOChannel *channel, GIOCondition condition, gpointer data)
 
 static void new_connection(GDBusMethodInvocation *invocation)
 {
-	g_log(JSCBT, G_LOG_LEVEL_MESSAGE, "New connection.");
+	g_log(JSCBT, G_LOG_LEVEL_INFO, "New connection.");
 
 	GDBusMessage *msg = g_dbus_method_invocation_get_message(invocation);
 	gchar *content = g_dbus_message_print(msg, 2);
@@ -210,14 +209,14 @@ static void signal_method_call(GDBusConnection *conn, const char *sender,
 															 GDBusMethodInvocation *invocation, void *userdata)
 {
 
-	g_log(JSCBT, G_LOG_LEVEL_MESSAGE, "Method invoked is [%s]\n\t on path [%s]\n\t with sender [%s]\n\t and interface [%s].", method, path, sender, interface);
+	g_log(JSCBT, G_LOG_LEVEL_INFO, "Method invoked is [%s]\n\t on path [%s]\n\t with sender [%s]\n\t and interface [%s].", method, path, sender, interface);
 	if (!g_strcmp0(method, "NewConnection"))
 	{
 		new_connection(invocation);
 	}
 	else
 	{
-		g_log(JSCBT, G_LOG_LEVEL_MESSAGE, "Method: %s.", method);
+		g_log(JSCBT, G_LOG_LEVEL_INFO, "Method: %s.", method);
 	}
 }
 
@@ -291,7 +290,7 @@ int register_service(char *service_path,
 			if (interface != NULL)
 			{
 				gchar *interfaceName = interface->name;
-				g_log(JSCBT, G_LOG_LEVEL_MESSAGE, "Interface name is [%s].", interfaceName);
+				g_log(JSCBT, G_LOG_LEVEL_INFO, "Interface name is [%s].", interfaceName);
 			}
 
 			g_dbus_connection_register_object(conn,
